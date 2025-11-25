@@ -28,12 +28,16 @@ async def test_correctness():
     """
     Run the compiled benchmark to verify correctness of the implementation.
     
-    This function executes the benchmark and checks if the computed results
-    match the expected values within acceptable tolerance.
+    Executes 'make test-correctness' which runs the benchmark with seed 42
+    and validates that the output matches expected values for:
+    - Total Lennard-Jones energy: 304963.782767
+    - Number of particles: 30000
+    - Number of interactions: 449985000
+    - Particle generation attempts: 30253
     
     Returns:
-        str: Success message if test passes, error message if it fails or 
-             if the benchmark hasn't been compiled yet
+        str: Test output including "✓ Correctness test PASSED" on success,
+             or error message with details on failure
     
     Note:
         Must call make_lj_benchmark() before running this test
@@ -59,9 +63,23 @@ async def make_clean():
     success = await async_api.make_clean()
     return success
 
-# @mcp.tool()
-# def test_speed():
-#     pass
+@mcp.tool()
+async def test_speed():
+    """
+    Run the compiled benchmark to measure execution speed.
+    
+    Executes 'make test-speed' which runs the benchmark without a fixed seed
+    to measure the runtime performance of the current compilation.
+    
+    Returns:
+        str: Test output including timing information and benchmark results,
+             or error message if the benchmark hasn't been compiled yet
+    
+    Note:
+        Must call make_lj_benchmark() before running this test
+    """
+    result = await async_api.test_speed()
+    return result
 
 if __name__ == "__main__":
     mcp.run(transport="stdio")
