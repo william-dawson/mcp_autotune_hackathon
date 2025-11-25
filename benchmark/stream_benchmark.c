@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define N 80000000
-#define NTIMES 100
+#define N 200000000
+#define NTIMES 20
 
 // ALLOCATION_START
 double *a, *b, *c;
