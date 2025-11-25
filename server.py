@@ -60,5 +60,101 @@ async def test_speed():
     result = await async_api.test_speed()
     return result
 
+@mcp.tool()
+async def get_source_code():
+    """
+    Get the default STREAM benchmark source code.
+
+    This returns the current implementation which you can use as a reference
+    when creating custom kernel implementations.
+
+    Returns:
+        str: Complete C source code of stream_benchmark.c
+    """
+    result = await async_api.get_source_code()
+    return result
+
+@mcp.tool()
+async def make_custom_benchmark(CC: str, CFLAGS: str, LDFLAGS: str,
+                                allocation_code: str = "",
+                                copy_code: str = "",
+                                scale_code: str = "",
+                                add_code: str = "",
+                                triad_code: str = ""):
+    """
+    Compile STREAM benchmark with custom kernel implementations.
+
+    Allows you to provide optimized implementations for any of the kernels or allocation.
+    Use get_source_code() first to see the default implementations and required function signatures.
+
+    IMPORTANT: You must match these exact function signatures:
+
+    For allocation_code (if provided):
+        double *a, *b, *c;  // Global pointers
+        void allocate_arrays() {
+            // Your allocation code here
+        }
+        void free_arrays() {
+            // Your deallocation code here
+        }
+
+    For copy_code (if provided):
+        void copy_kernel(double *a, double *b, int n) {
+            // Implement: a[i] = b[i] for all i
+        }
+
+    For scale_code (if provided):
+        void scale_kernel(double *b, double *a, int n) {
+            // Implement: b[i] = 2.0 * a[i] for all i
+        }
+
+    For add_code (if provided):
+        void add_kernel(double *c, double *a, double *b, int n) {
+            // Implement: c[i] = a[i] + b[i] for all i
+        }
+
+    For triad_code (if provided):
+        void triad_kernel(double *a, double *b, double *c, int n) {
+            // Implement: a[i] = b[i] + 3.0 * c[i] for all i
+        }
+
+    Args:
+        CC (str): C compiler (e.g., "gcc", "clang")
+        CFLAGS (str): Compiler flags (e.g., "-O3 -march=native -fopenmp")
+        LDFLAGS (str): Linker flags (e.g., "-lm")
+        allocation_code (str): Custom allocation implementation (optional)
+        copy_code (str): Custom copy kernel implementation (optional)
+        scale_code (str): Custom scale kernel implementation (optional)
+        add_code (str): Custom add kernel implementation (optional)
+        triad_code (str): Custom triad kernel implementation (optional)
+
+    Returns:
+        bool or str: True if compilation succeeds, error message otherwise
+
+    Example:
+        make_custom_benchmark(
+            CC="gcc",
+            CFLAGS="-O3 -march=native",
+            LDFLAGS="-lm",
+            copy_code='''void copy_kernel(double * restrict a, double * restrict b, int n) {
+    for (int i = 0; i < n; i += 4) {
+        a[i] = b[i];
+        a[i+1] = b[i+1];
+        a[i+2] = b[i+2];
+        a[i+3] = b[i+3];
+    }
+}'''
+        )
+    """
+    result = await async_api.make_custom_benchmark(
+        CC, CFLAGS, LDFLAGS,
+        allocation_code if allocation_code else None,
+        copy_code if copy_code else None,
+        scale_code if scale_code else None,
+        add_code if add_code else None,
+        triad_code if triad_code else None
+    )
+    return result
+
 if __name__ == "__main__":
     mcp.run(transport="stdio")
