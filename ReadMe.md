@@ -36,3 +36,31 @@ This will:
 2. Send initialization and tool listing requests
 3. Verify the server responds correctly
 4. Display available tools
+
+## Connecting from MCP Clients
+
+The server uses **stdio transport**, so your MCP client needs to launch the Docker container as a subprocess.
+
+### Claude Desktop Configuration
+
+Add to your Claude Desktop config (`~/Library/Application Support/Claude/claude_desktop_config.json` on macOS):
+
+```json
+{
+  "mcpServers": {
+    "lj_benchmark": {
+      "command": "docker",
+      "args": ["run", "-i", "--rm", "lj_benchmark"]
+    }
+  }
+}
+```
+
+### Generic MCP Client
+
+Any MCP client should run:
+```bash
+docker run -i --rm lj_benchmark
+```
+
+And communicate via stdin/stdout using JSON-RPC 2.0 protocol.
