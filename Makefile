@@ -23,7 +23,7 @@ test-correctness: lj_benchmark
 
 test-speed: lj_benchmark
 	@echo "Running speed test..."
-	time ./lj_benchmark
+	@./lj_benchmark
 
 test: test-correctness test-speed
 
