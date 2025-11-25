@@ -19,9 +19,9 @@ absolute paths. Add in the `mcpServers` section.
     "lj": {
       "name": "lj",
       "type": "stdio",
-      "command": "/Users/wddawson/.local/share/mamba/envs/test_mcp/bin/python",
+      "command": "docker",
       "args": [
-        "/Users/wddawson/Desktop/mcp_autotune_hackathon/server.py"
+        "run", "-i", "--rm", "lj_benchmark"
       ]
     }
 ```
