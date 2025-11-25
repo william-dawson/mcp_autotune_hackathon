@@ -18,11 +18,12 @@ RUN pip3 install fastmcp
 # Set working directory
 WORKDIR /app
 
-# Copy all source files
-COPY lj_benchmark.c .
-COPY Makefile .
+# Copy Python files
 COPY server.py .
 COPY async_api.py .
+
+# Copy benchmark files to benchmark subdirectory
+COPY benchmark/ benchmark/
 
 # Default command runs the MCP server
 CMD ["python3", "server.py"]

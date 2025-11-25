@@ -25,6 +25,18 @@ absolute paths. Add in the `mcpServers` section.
       ]
     }
 ```
+For claude code, you can put the following into a `.mcp.json` file of the
+current directory.
+```
+{
+  "mcpServers": {
+    "lj_benchmark": {
+      "command": "docker",
+      "args": ["run", "-i", "--rm", "lj_benchmark"]
+    }
+  }
+}
+```
 
 ## Running the MCP Server with Docker
 

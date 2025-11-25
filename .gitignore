@@ -1,8 +1,12 @@
 # Compiled binary
-lj_benchmark
+stream_benchmark
+benchmark/stream_benchmark
+
+# Python cache
+__pycache__/
+*.pyc
 
 # Temporary files
 *.swp
 *.o
 *.tmp
-/tmp/lj_output.txt
