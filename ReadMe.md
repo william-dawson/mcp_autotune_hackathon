@@ -22,3 +22,17 @@ The MCP server exposes the following tools:
 - `make_lj_benchmark(CC, CFLAGS, LDFLAGS)` - Compile the benchmark with specified compiler and flags
 - `test_correctness()` - Verify correctness of the compiled benchmark
 - `make_clean()` - Clean up build artifacts
+
+## Testing the MCP Server
+
+To verify the MCP server is working correctly in Docker:
+
+```bash
+python3 test_mcp.py
+```
+
+This will:
+1. Start the Docker container with the MCP server
+2. Send initialization and tool listing requests
+3. Verify the server responds correctly
+4. Display available tools
