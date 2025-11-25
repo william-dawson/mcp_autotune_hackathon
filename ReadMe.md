@@ -6,6 +6,26 @@ with an associated makefile. We can start with things like having the compiler
 tweak the flags for gcc. Then we can ask it to consider some actual hand
 written optimizations.
 
+## Connecting with Gemini
+
+First setup python so that you have the fastmcp package. You can verify
+everything is good by typing
+```
+python utils/test_mcp.py
+```
+If that works, you can modify `~/.gemini/settings.json`. Make sure to use
+absolute paths. Add in the `mcpServers` section.
+```
+    "lj": {
+      "name": "lj",
+      "type": "stdio",
+      "command": "/Users/wddawson/.local/share/mamba/envs/test_mcp/bin/python",
+      "args": [
+        "/Users/wddawson/Desktop/mcp_autotune_hackathon/server.py"
+      ]
+    }
+```
+
 ## Running the MCP Server with Docker
 
 Build the Docker image:
