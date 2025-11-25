@@ -23,7 +23,6 @@ COPY lj_benchmark.c .
 COPY Makefile .
 COPY server.py .
 COPY async_api.py .
-COPY run.py .
 
 # Default command runs the MCP server
 CMD ["python3", "server.py"]
