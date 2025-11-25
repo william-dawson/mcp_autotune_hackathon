@@ -10,12 +10,17 @@
 
 typedef struct {
     double x, y, z;
+    double c6;   // C6 coefficient for this particle
+    double c12;  // C12 coefficient for this particle
 } Particle;
 
-double lennard_jones(double r) {
-    double sr6 = pow(SIGMA / r, 6);
-    double sr12 = sr6 * sr6;
-    return 4.0 * EPSILON * (sr12 - sr6);
+double lennard_jones(Particle *p1, Particle *p2, double r) {
+    // Use geometric mean for mixing rule
+    double c6_ij = sqrt(p1->c6 * p2->c6);
+    double c12_ij = sqrt(p1->c12 * p2->c12);
+    double r6 = pow(r, 6);
+    double r12 = r6 * r6;
+    return c12_ij / r12 - c6_ij / r6;
 }
 
 double distance(Particle *p1, Particle *p2) {
@@ -59,6 +64,9 @@ int main(int argc, char *argv[]) {
         candidate.x = (double)rand() / RAND_MAX * box_size;
         candidate.y = (double)rand() / RAND_MAX * box_size;
         candidate.z = (double)rand() / RAND_MAX * box_size;
+        // Assign random C6 and C12 coefficients (variation around typical values)
+        candidate.c6 = 0.5 + (double)rand() / RAND_MAX * 1.0;   // Range: 0.5 to 1.5
+        candidate.c12 = 0.5 + (double)rand() / RAND_MAX * 1.0;  // Range: 0.5 to 1.5
 
         if (!check_overlap(particles, n_generated, &candidate)) {
             particles[n_generated] = candidate;
@@ -83,7 +91,7 @@ int main(int argc, char *argv[]) {
     for (int i = 0; i < N_PARTICLES; i++) {
         for (int j = i + 1; j < N_PARTICLES; j++) {
             double r = distance(&particles[i], &particles[j]);
-            total_energy += lennard_jones(r);
+            total_energy += lennard_jones(&particles[i], &particles[j], r);
         }
     }
 
