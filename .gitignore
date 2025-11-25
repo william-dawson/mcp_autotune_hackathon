@@ -1,0 +1,8 @@
+# Compiled binary
+lj_benchmark
+
+# Temporary files
+*.swp
+*.o
+*.tmp
+/tmp/lj_output.txt

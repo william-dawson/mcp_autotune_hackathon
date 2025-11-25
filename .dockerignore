@@ -1,0 +1,5 @@
+lj_benchmark
+*.swp
+.git
+.gitignore
+ReadMe.md
