@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 
-#define N_PARTICLES 1000
+#define N_PARTICLES 17000
 #define EPSILON 1.0
 #define SIGMA 1.0
 
