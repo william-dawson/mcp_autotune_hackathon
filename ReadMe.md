@@ -28,7 +28,7 @@ The MCP server exposes the following tools:
 To verify the MCP server is working correctly in Docker:
 
 ```bash
-python3 test_mcp.py
+python3 utils/test_mcp.py
 ```
 
 This will:
