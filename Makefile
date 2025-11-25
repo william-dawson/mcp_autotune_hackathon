@@ -10,9 +10,9 @@ lj_benchmark: lj_benchmark.c
 test-correctness: lj_benchmark
 	@echo "Running correctness test..."
 	@./lj_benchmark 42 > /tmp/lj_output.txt
-	@if grep -q "Total Lennard-Jones energy: 816288274411416.750000" /tmp/lj_output.txt && \
-	    grep -q "Number of particles: 17000" /tmp/lj_output.txt && \
-	    grep -q "Number of interactions: 144491500" /tmp/lj_output.txt; then \
+	@if grep -q "Total Lennard-Jones energy: 2453800171930224.000000" /tmp/lj_output.txt && \
+	    grep -q "Number of particles: 30000" /tmp/lj_output.txt && \
+	    grep -q "Number of interactions: 449985000" /tmp/lj_output.txt; then \
 		echo "✓ Correctness test PASSED"; \
 	else \
 		echo "✗ Correctness test FAILED"; \
