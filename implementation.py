@@ -6,21 +6,23 @@ import platform
 
 def make_stream_benchmark(CC: str, CFLAGS: str, LDFLAGS: str):
     try:
-        subprocess.run(
+        result = subprocess.run(
             ["make", "stream_benchmark", f"CC={CC}", f"CFLAGS={CFLAGS}", f"LDFLAGS={LDFLAGS}"],
-            check=True,
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL,
+            capture_output=True,
+            text=True,
             cwd="benchmark"
         )
-    except subprocess.CalledProcessError:
-        print("Error: 'make' command failed.", file=sys.stderr)
-        return False
-    except FileNotFoundError:
-        print("Error: 'make' not found.", file=sys.stderr)
-        return False
 
-    return True
+        if result.returncode != 0:
+            error_msg = f"Compilation failed:\nSTDOUT: {result.stdout}\nSTDERR: {result.stderr}"
+            print(error_msg, file=sys.stderr)
+            return error_msg
+
+        return True
+    except FileNotFoundError:
+        error_msg = "Error: 'make' not found."
+        print(error_msg, file=sys.stderr)
+        return error_msg
 
 
 def test_correctness():
@@ -49,18 +51,23 @@ def test_correctness():
 
 def make_clean():
     try:
-        subprocess.run(
+        result = subprocess.run(
             ["make", "clean"],
-            check=True,
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL,
+            capture_output=True,
+            text=True,
             cwd="benchmark"
         )
-    except subprocess.CalledProcessError:
-        print("Error: 'make' command failed.", file=sys.stderr)
-        return False
 
-    return True
+        if result.returncode != 0:
+            error_msg = f"Clean failed:\nSTDOUT: {result.stdout}\nSTDERR: {result.stderr}"
+            print(error_msg, file=sys.stderr)
+            return error_msg
+
+        return True
+    except FileNotFoundError:
+        error_msg = "Error: 'make' not found."
+        print(error_msg, file=sys.stderr)
+        return error_msg
 
 
 def test_speed():
