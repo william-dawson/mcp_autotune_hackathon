@@ -159,16 +159,16 @@ async def make_custom_benchmark(CC: str, CFLAGS: str, LDFLAGS: str,
 if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser(description="MCP Autotune Server")
-    parser.add_argument("--transport", choices=["stdio", "sse"], default="stdio",
-                        help="Transport type: stdio for local, sse for HTTP")
+    parser.add_argument("--transport", choices=["stdio", "http"], default="stdio",
+                        help="Transport type: stdio for local, http for HTTP")
     parser.add_argument("--host", default="0.0.0.0",
-                        help="Host to bind to (for SSE transport)")
+                        help="Host to bind to (for HTTP transport)")
     parser.add_argument("--port", type=int, default=8000,
-                        help="Port to bind to (for SSE transport)")
+                        help="Port to bind to (for HTTP transport)")
     args = parser.parse_args()
 
-    if args.transport == "sse":
+    if args.transport == "http":
         print(f"Starting MCP server on http://{args.host}:{args.port}")
-        mcp.run(transport="sse", host=args.host, port=args.port)
+        mcp.run(transport="http", host=args.host, port=args.port)
     else:
         mcp.run(transport="stdio")
