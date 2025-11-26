@@ -42,7 +42,7 @@ def send_request_http(base_url, method, params=None, request_id=None):
     response = requests.post(
         f"{base_url}/mcp",
         json=request,
-        headers={"Content-Type": "application/json"}
+        headers={"Content-Type": "application/json", "Accept": "application/json, text/event-stream"}
     )
 
     if response.status_code == 200:

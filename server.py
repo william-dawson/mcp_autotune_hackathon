@@ -14,7 +14,8 @@ parser.add_argument("--port", type=int, default=8000,
 args = parser.parse_args()
 
 # Initialize the MCP server for the autotune hackathon
-mcp = FastMCP("autotune_hackathon", host=args.host, port=args.port)
+mcp = FastMCP("autotune_hackathon", host=args.host, port=args.port,
+              json_response=True)
 
 @mcp.tool()
 async def make_stream_benchmark(CC: str, CFLAGS: str, LDFLAGS: str):
