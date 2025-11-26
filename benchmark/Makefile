@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS ?= -O2 -Wall
-LDFLAGS = -lm
+LDFLAGS = 
 
 all: stream_benchmark
 
