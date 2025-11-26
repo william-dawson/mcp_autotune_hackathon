@@ -24,11 +24,14 @@ jobs:
         sudo apt-get install -y ./apptainer_1.3.0_amd64.deb
 
     - name: Build Docker image
-      run: docker build -t stream_benchmark .
+      run: docker build -t lj_benchmark .
+
+    - name: Test MCP server
+      run: python3 utils/test_mcp.py
 
     - name: Build Apptainer SIF from Docker image
       run: |
-        apptainer build stream_benchmark.sif docker-daemon://stream_benchmark:latest
+        apptainer build stream_benchmark.sif docker-daemon://lj_benchmark:latest
 
     - name: Upload SIF artifact
       uses: actions/upload-artifact@v4
