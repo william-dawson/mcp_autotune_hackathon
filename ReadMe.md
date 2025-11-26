@@ -52,19 +52,16 @@ docker run -p 8000:8000 lj_benchmark python3 server.py --transport http --host 0
 
 Using Singularity/Apptainer:
 ```bash
-# Download and extract the sandbox artifact from GitHub Actions
-tar xzf stream_benchmark_amd64_sandbox.tar.gz
-
-# Run the server
-apptainer exec --pwd /app stream_benchmark_amd64_sandbox python3 server.py --transport http --host 0.0.0.0 --port 8000
+# Download the .sif file from GitHub Actions artifacts, then:
+apptainer exec --pwd /app stream_benchmark_amd64.sif python3 server.py --transport http --host 0.0.0.0 --port 8000
 ```
 
 Or build locally from Docker:
 ```bash
-apptainer build --sandbox stream_benchmark_sandbox docker-daemon://lj_benchmark:latest
-apptainer exec --pwd /app stream_benchmark_sandbox python3 server.py --transport http --host 0.0.0.0 --port 8000
+apptainer build stream_benchmark.sif docker-daemon://lj_benchmark:latest
+apptainer exec --pwd /app stream_benchmark.sif python3 server.py --transport http --host 0.0.0.0 --port 8000
 ```
 
-For ARM systems, use `stream_benchmark_arm64_sandbox.tar.gz` instead.
+For ARM systems, use `stream_benchmark_arm64.sif` instead.
 
-**Note**: Compilation happens in `/tmp/benchmark_work` which is writable in both Docker and Singularity, so no special flags are needed.
+**Note**: Compilation happens in `/tmp/benchmark_work` which is writable even in read-only .sif containers, so no special flags needed.
