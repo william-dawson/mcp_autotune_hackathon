@@ -156,5 +156,26 @@ async def make_custom_benchmark(CC: str, CFLAGS: str, LDFLAGS: str,
     )
     return result
 
+
+@mcp.tool()
+async def list_cpu_info():
+    """
+    Retrieve basic CPU and operating system information from the current machine.
+
+    Returns:
+        dict: A JSON-serializable dictionary containing:
+            - architecture (str): CPU architecture reported by the system.
+            - processor (str): Processor model name or identifier.
+            - system (str): Operating system type (e.g., Windows, Linux, Darwin).
+            - release (str): OS kernel release version.
+            - version (str): Full OS version string.
+            - machine (str): Machine hardware type.
+            - cores_logical (int): Number of logical CPU cores (includes hyperthreading).
+
+    This tool takes no input parameters.
+    """
+    cpu_info = implementation.list_cpu_info()
+    return cpu_info
+
 if __name__ == "__main__":
     mcp.run(transport="stdio")

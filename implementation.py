@@ -2,6 +2,7 @@ import subprocess
 import time
 import os
 import sys
+import platform
 
 def make_stream_benchmark(CC: str, CFLAGS: str, LDFLAGS: str):
     try:
@@ -165,3 +166,15 @@ def make_custom_benchmark(CC: str, CFLAGS: str, LDFLAGS: str,
     except Exception as e:
         print(f"Error: {e}", file=sys.stderr)
         return str(e)
+    
+def list_cpu_info():
+    cpu_info = {
+        'architecture': platform.machine(),
+        'processor': platform.processor(),
+        'system': platform.system(),
+        'release': platform.release(),
+        'version': platform.version(),
+        'machine': platform.machine(),
+        'cores_logical': os.cpu_count(),
+    }
+    return str(cpu_info)
