@@ -10,10 +10,14 @@ stream_benchmark: stream_benchmark.c
 custom: stream_benchmark_custom.c
 	$(CC) $(CFLAGS) -o stream_benchmark stream_benchmark_custom.c $(LDFLAGS)
 
-test-correctness: stream_benchmark
+test-correctness:
+	@if [ ! -f stream_benchmark ]; then echo "Error: stream_benchmark not found"; exit 1; fi
+	@if [ ! -x stream_benchmark ]; then echo "Error: stream_benchmark not executable"; chmod +x stream_benchmark; fi
 	./stream_benchmark
 
-test-speed: stream_benchmark
+test-speed:
+	@if [ ! -f stream_benchmark ]; then echo "Error: stream_benchmark not found"; exit 1; fi
+	@if [ ! -x stream_benchmark ]; then echo "Error: stream_benchmark not executable"; chmod +x stream_benchmark; fi
 	./stream_benchmark
 
 test: test-correctness test-speed

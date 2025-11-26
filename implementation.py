@@ -137,13 +137,26 @@ def make_custom_benchmark(CC: str, CFLAGS: str, LDFLAGS: str,
         with open("benchmark/stream_benchmark_custom.c", "w") as f:
             f.write(source)
 
-        subprocess.run(
+        result = subprocess.run(
             ["make", "custom", f"CC={CC}", f"CFLAGS={CFLAGS}", f"LDFLAGS={LDFLAGS}"],
-            check=True,
             capture_output=True,
             text=True,
             cwd="benchmark"
         )
+
+        if result.returncode != 0:
+            error_msg = f"Compilation failed:\nSTDOUT: {result.stdout}\nSTDERR: {result.stderr}"
+            print(error_msg, file=sys.stderr)
+            return error_msg
+
+        # Verify binary was created and is executable
+        binary_path = "benchmark/stream_benchmark"
+        if not os.path.exists(binary_path):
+            return "Error: Binary not created after compilation"
+
+        if not os.access(binary_path, os.X_OK):
+            os.chmod(binary_path, 0o755)
+
         return True
     except subprocess.CalledProcessError as e:
         error_msg = f"Compilation failed:\n{e.stderr}"
