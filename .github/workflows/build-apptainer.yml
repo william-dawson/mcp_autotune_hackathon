@@ -10,10 +10,19 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        arch: [amd64, arm64]
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
+
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v3
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
 
     - name: Install Apptainer
       run: |
@@ -23,19 +32,21 @@ jobs:
         wget https://github.com/apptainer/apptainer/releases/download/v1.3.0/apptainer_1.3.0_amd64.deb
         sudo apt-get install -y ./apptainer_1.3.0_amd64.deb
 
-    - name: Build Docker image
-      run: docker build -t lj_benchmark .
+    - name: Build Docker image for ${{ matrix.arch }}
+      run: |
+        docker buildx build --platform linux/${{ matrix.arch }} -t lj_benchmark:${{ matrix.arch }} --load .
 
-    - name: Test MCP server
+    - name: Test MCP server (amd64 only)
+      if: matrix.arch == 'amd64'
       run: python3 utils/test_mcp.py
 
     - name: Build Apptainer SIF from Docker image
       run: |
-        apptainer build stream_benchmark.sif docker-daemon://lj_benchmark:latest
+        apptainer build stream_benchmark_${{ matrix.arch }}.sif docker-daemon://lj_benchmark:${{ matrix.arch }}
 
     - name: Upload SIF artifact
       uses: actions/upload-artifact@v4
       with:
-        name: stream_benchmark-sif
-        path: stream_benchmark.sif
+        name: stream_benchmark-${{ matrix.arch }}-sif
+        path: stream_benchmark_${{ matrix.arch }}.sif
         retention-days: 90
