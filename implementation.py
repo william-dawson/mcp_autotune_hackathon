@@ -3,7 +3,7 @@ import time
 import os
 import sys
 
-async def make_stream_benchmark(CC: str, CFLAGS: str, LDFLAGS: str):
+def make_stream_benchmark(CC: str, CFLAGS: str, LDFLAGS: str):
     try:
         subprocess.run(
             ["make", "stream_benchmark", f"CC={CC}", f"CFLAGS={CFLAGS}", f"LDFLAGS={LDFLAGS}"],
@@ -20,9 +20,9 @@ async def make_stream_benchmark(CC: str, CFLAGS: str, LDFLAGS: str):
         return False
 
     return True
-    
 
-async def test_correctness():
+
+def test_correctness():
     executable_name = "benchmark/stream_benchmark"
     if not os.path.exists(executable_name):
         print(f"Error: Executable '{executable_name}' not found after build.", file=sys.stderr)
@@ -46,7 +46,7 @@ async def test_correctness():
         return "Failure: 'make' command not found."
 
 
-async def make_clean():
+def make_clean():
     try:
         subprocess.run(
             ["make", "clean"],
@@ -62,7 +62,7 @@ async def make_clean():
     return True
 
 
-async def test_speed():
+def test_speed():
     executable_name = "benchmark/stream_benchmark"
     if not os.path.exists(executable_name):
         print(f"Error: Executable '{executable_name}' not found after build.", file=sys.stderr)
@@ -86,7 +86,7 @@ async def test_speed():
         return "Failure: 'make' command not found."
 
 
-async def get_source_code():
+def get_source_code():
     try:
         with open("benchmark/stream_benchmark.c", "r") as f:
             return f.read()
@@ -94,7 +94,7 @@ async def get_source_code():
         return "Error: Source file not found."
 
 
-async def make_custom_benchmark(CC: str, CFLAGS: str, LDFLAGS: str,
+def make_custom_benchmark(CC: str, CFLAGS: str, LDFLAGS: str,
                                 allocation_code: str = None,
                                 copy_code: str = None,
                                 scale_code: str = None,

@@ -1,5 +1,5 @@
 from mcp.server.fastmcp import FastMCP
-import async_api
+import implementation
 
 # Initialize the MCP server for the autotune hackathon
 mcp = FastMCP("autotune_hackathon")
@@ -17,7 +17,7 @@ async def make_stream_benchmark(CC: str, CFLAGS: str, LDFLAGS: str):
     Returns:
         bool: True if compilation succeeds, False otherwise
     """
-    success = await async_api.make_stream_benchmark(CC, CFLAGS, LDFLAGS)
+    success = implementation.make_stream_benchmark(CC, CFLAGS, LDFLAGS)
     return success
 
 @mcp.tool()
@@ -28,25 +28,25 @@ async def test_correctness():
     Returns:
         str: JSON with correctness result {"correctness": "PASS"} or {"correctness": "FAIL"}
     """
-    success = await async_api.test_correctness()
+    success = implementation.test_correctness()
     return success
 
 @mcp.tool()
 async def make_clean():
     """
     Clean up compiled artifacts and temporary files.
-    
+
     This removes the compiled benchmark executable and any object files
     created during compilation, allowing for a fresh build.
-    
+
     Returns:
         str: Success message indicating cleanup completion
-    
+
     Example use case:
         Call this before trying a new set of compiler flags to ensure
         a clean compilation environment
     """
-    success = await async_api.make_clean()
+    success = implementation.make_clean()
     return success
 
 @mcp.tool()
@@ -57,7 +57,7 @@ async def test_speed():
     Returns:
         str: JSON with bandwidth in GB/s for each kernel: {"copy_GB_s": ..., "scale_GB_s": ..., "add_GB_s": ..., "triad_GB_s": ...}
     """
-    result = await async_api.test_speed()
+    result = implementation.test_speed()
     return result
 
 @mcp.tool()
@@ -71,7 +71,7 @@ async def get_source_code():
     Returns:
         str: Complete C source code of stream_benchmark.c
     """
-    result = await async_api.get_source_code()
+    result = implementation.get_source_code()
     return result
 
 @mcp.tool()
@@ -146,7 +146,7 @@ async def make_custom_benchmark(CC: str, CFLAGS: str, LDFLAGS: str,
 }'''
         )
     """
-    result = await async_api.make_custom_benchmark(
+    result = implementation.make_custom_benchmark(
         CC, CFLAGS, LDFLAGS,
         allocation_code if allocation_code else None,
         copy_code if copy_code else None,

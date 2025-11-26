@@ -20,7 +20,7 @@ WORKDIR /app
 
 # Copy Python files
 COPY server.py .
-COPY async_api.py .
+COPY implementation.py .
 
 # Copy benchmark files to benchmark subdirectory
 COPY benchmark/ benchmark/
