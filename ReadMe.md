@@ -45,7 +45,6 @@ current directory.
 ## Running Over HTTP (Remote Server)
 The MCP server supports both local (stdio) and remote (HTTP/SSE) transports.
 
-### Running the Server on a Remote Machine
 Using Docker:
 ```bash
 docker run -p 8000:8000 lj_benchmark python3 server.py --transport sse
