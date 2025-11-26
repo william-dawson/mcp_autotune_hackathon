@@ -25,5 +25,8 @@ COPY implementation.py .
 # Copy benchmark files to benchmark subdirectory
 COPY benchmark/ benchmark/
 
-# Default command runs the MCP server
+# Expose port for HTTP/SSE transport (optional)
+EXPOSE 8000
+
+# Default command runs the MCP server with stdio
 CMD ["python3", "server.py"]
