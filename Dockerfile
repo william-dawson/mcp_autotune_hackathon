@@ -25,6 +25,9 @@ COPY implementation.py .
 # Copy benchmark files to benchmark subdirectory
 COPY benchmark/ benchmark/
 
+# Ensure all files in /app are writable (important for Singularity sandbox)
+RUN chmod -R 777 /app
+
 # Expose port for HTTP/SSE transport (optional)
 EXPOSE 8000
 
