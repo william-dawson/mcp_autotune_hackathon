@@ -55,13 +55,20 @@ Using Singularity/Apptainer:
 # Download the .sif file from GitHub Actions artifacts, then:
 apptainer exec --pwd /app stream_benchmark_amd64.sif python3 server.py --transport http --host 0.0.0.0 --port 8000
 ```
-
-Or build locally from Docker:
-```bash
-apptainer build stream_benchmark.sif docker-daemon://lj_benchmark:latest
-apptainer exec --pwd /app stream_benchmark.sif python3 server.py --transport http --host 0.0.0.0 --port 8000
-```
-
 For ARM systems, use `stream_benchmark_arm64.sif` instead.
 
-**Note**: Compilation happens in `/tmp/benchmark_work` which is writable even in read-only .sif containers, so no special flags needed.
+
+### Use with R-CCS Cloud
+Connect to the R_CCS cloud and reserve a job in interactive mode.
+```
+srun -p fx700 --ntasks=1 --cpus-per-task=48 --pty bash
+```
+Start the server:
+```
+singularity exec --pwd /app stream_benchmark_arm64.sif python3 server.py --transport http --host 0.0.0.0 --port 8002
+```
+Now in a different terminal on your machine, connect again to the cloud machine.
+```
+ssh -L 8002:fx01:8002 login.cloud.r-ccs.riken.jp
+```
+Replace fx01 with the name of the compute node you actually got.
