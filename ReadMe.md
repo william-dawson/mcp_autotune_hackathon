@@ -50,10 +50,21 @@ Using Docker:
 docker run -p 8000:8000 lj_benchmark python3 server.py --transport http --host 0.0.0.0 --port 8000
 ```
 
-Using Singularity/Apptainer:
+Using Singularity/Apptainer Sandbox (writable):
 ```bash
-apptainer exec --writable-tmpfs --pwd /app stream_benchmark_amd64.sif python3 server.py --transport http --host 0.0.0.0 --port 8000
-```
-Note: `--writable-tmpfs` is required because compilation needs write access to the filesystem.
+# Download and extract the sandbox artifact from GitHub Actions
+tar xzf stream_benchmark_amd64_sandbox.tar.gz
 
-For ARM systems, use `stream_benchmark_arm64.sif` instead.
+# Run the server
+apptainer exec --pwd /app stream_benchmark_amd64_sandbox python3 server.py --transport http --host 0.0.0.0 --port 8000
+```
+
+Or build a sandbox locally from Docker:
+```bash
+apptainer build --sandbox stream_benchmark_sandbox docker-daemon://lj_benchmark:latest
+apptainer exec --pwd /app stream_benchmark_sandbox python3 server.py --transport http --host 0.0.0.0 --port 8000
+```
+
+For ARM systems, use `stream_benchmark_arm64_sandbox.tar.gz` instead.
+
+Note: Sandbox containers are directory-based and writable, unlike .sif files which are read-only.

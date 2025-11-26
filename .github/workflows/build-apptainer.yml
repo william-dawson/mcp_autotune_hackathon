@@ -36,13 +36,14 @@ jobs:
       run: |
         docker buildx build --platform linux/${{ matrix.arch }} -t lj_benchmark:${{ matrix.arch }} --load .
 
-    - name: Build Apptainer SIF from Docker image
+    - name: Build Apptainer sandbox from Docker image
       run: |
-        apptainer build stream_benchmark_${{ matrix.arch }}.sif docker-daemon://lj_benchmark:${{ matrix.arch }}
+        apptainer build --sandbox stream_benchmark_${{ matrix.arch }}_sandbox docker-daemon://lj_benchmark:${{ matrix.arch }}
+        tar czf stream_benchmark_${{ matrix.arch }}_sandbox.tar.gz stream_benchmark_${{ matrix.arch }}_sandbox
 
-    - name: Upload SIF artifact
+    - name: Upload sandbox artifact
       uses: actions/upload-artifact@v4
       with:
-        name: stream_benchmark-${{ matrix.arch }}-sif
-        path: stream_benchmark_${{ matrix.arch }}.sif
+        name: stream_benchmark-${{ matrix.arch }}-sandbox
+        path: stream_benchmark_${{ matrix.arch }}_sandbox.tar.gz
         retention-days: 90
