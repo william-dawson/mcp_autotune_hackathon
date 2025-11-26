@@ -138,7 +138,7 @@ def make_custom_benchmark(CC: str, CFLAGS: str, LDFLAGS: str,
             f.write(source)
 
         subprocess.run(
-            [f"{CC}", *CFLAGS.split(), "-o", "stream_benchmark", "stream_benchmark_custom.c", *LDFLAGS.split()],
+            ["make", "custom", f"CC={CC}", f"CFLAGS={CFLAGS}", f"LDFLAGS={LDFLAGS}"],
             check=True,
             capture_output=True,
             text=True,
