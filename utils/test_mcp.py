@@ -141,6 +141,12 @@ def test_mcp_server():
 
         # 10. Clean up
         call_tool(process, "make_clean", {}, req_id)
+        req_id += 1
+
+        # Shutdown gracefully
+        print("\nShutting down MCP server...")
+        send_request(process, "shutdown", {}, req_id)
+        send_request(process, "exit")
 
         print("\n" + "="*60)
         print("✓ All MCP tools tested successfully!")
@@ -152,8 +158,11 @@ def test_mcp_server():
         traceback.print_exc()
         return False
     finally:
-        process.terminate()
-        process.wait(timeout=5)
+        try:
+            process.wait(timeout=2)
+        except subprocess.TimeoutExpired:
+            process.kill()
+            process.wait()
 
 if __name__ == "__main__":
     success = test_mcp_server()
