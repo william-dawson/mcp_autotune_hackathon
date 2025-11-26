@@ -1,8 +1,20 @@
 from mcp.server.fastmcp import FastMCP
 import implementation
+import sys
+
+# Parse arguments early to configure server
+import argparse
+parser = argparse.ArgumentParser(description="MCP Autotune Server")
+parser.add_argument("--transport", choices=["stdio", "http"], default="stdio",
+                    help="Transport type: stdio for local, http for HTTP")
+parser.add_argument("--host", default="0.0.0.0",
+                    help="Host to bind to (for SSE transport)")
+parser.add_argument("--port", type=int, default=8000,
+                    help="Port to bind to (for SSE transport)")
+args = parser.parse_args()
 
 # Initialize the MCP server for the autotune hackathon
-mcp = FastMCP("autotune_hackathon")
+mcp = FastMCP("autotune_hackathon", host=args.host, port=args.port)
 
 @mcp.tool()
 async def make_stream_benchmark(CC: str, CFLAGS: str, LDFLAGS: str):
@@ -178,4 +190,8 @@ async def list_cpu_info():
     return cpu_info
 
 if __name__ == "__main__":
-    mcp.run(transport="stdio")
+    if args.transport == "http":
+        print(f"Starting MCP server on http://{args.host}:{args.port}")
+        mcp.run(transport="streamable-http")
+    else:
+        mcp.run(transport="stdio")

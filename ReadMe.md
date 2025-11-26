@@ -41,3 +41,18 @@ current directory.
   }
 }
 ```
+
+## Running Over HTTP (Remote Server)
+The MCP server supports both local (stdio) and remote (HTTP) transports.
+
+Using Docker:
+```bash
+docker run -p 8000:8000 lj_benchmark python3 server.py --transport http --host 0.0.0.0 --port 8000
+```
+
+Using Singularity/Apptainer:
+```bash
+apptainer exec stream_benchmark_amd64.sif python3 server.py --transport http --host 0.0.0.0 --port 8000
+```
+
+For ARM systems, use `stream_benchmark_arm64.sif` instead.
