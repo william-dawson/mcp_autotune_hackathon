@@ -52,7 +52,8 @@ docker run -p 8000:8000 lj_benchmark python3 server.py --transport http --host 0
 
 Using Singularity/Apptainer:
 ```bash
-apptainer exec --pwd /app stream_benchmark_amd64.sif python3 server.py --transport http --host 0.0.0.0 --port 8000
+apptainer exec --writable-tmpfs --pwd /app stream_benchmark_amd64.sif python3 server.py --transport http --host 0.0.0.0 --port 8000
 ```
+Note: `--writable-tmpfs` is required because compilation needs write access to the filesystem.
 
 For ARM systems, use `stream_benchmark_arm64.sif` instead.
